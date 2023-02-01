@@ -5,7 +5,7 @@ const { repairsRouter } = require('../routes/repairs.routes');
 const { db } = require('../database/db');
 const morgan = require('morgan');
 const globalErrorHandler = require('../controllers/error.controller');
-const AppError = require('../utils/appError')
+const AppError = require('../utils/appError');
 
 class Server {
   constructor() {
