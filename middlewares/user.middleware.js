@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const catchAsync = require('../utils/catchAsync')
 
 exports.validIfExistUser = async (req, res, next) => {
   try {

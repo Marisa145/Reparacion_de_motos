@@ -1,6 +1,7 @@
 const Repairs = require('../models/repairs.model');
-exports.pendingListRepairs = async (req, res) => {
-  try {
+const catchAsync = require('../utils/catchAsync');
+
+exports.pendingListRepairs = catchAsync(async (req, res) => {
     // 1. BUSCAR TODOS LOS USUARIOS QUE ESTAN CON STATUS PENDING
     const repairs = await Repairs.findAll({
       where: {
@@ -13,16 +14,9 @@ exports.pendingListRepairs = async (req, res) => {
       message: 'Users was found successfully',
       repairs,
     });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
-exports.pendingOneRepair = async (req, res) => {
-  try {
+ 
+});
+exports.pendingOneRepair = catchAsync (async (req, res) => {
     const { repairs } = req;
 
     // 4. ENVIAR UNA RESPUESTA AL USUARIO
@@ -31,17 +25,10 @@ exports.pendingOneRepair = async (req, res) => {
       message: 'Repairs was found successfully',
       repairs,
     });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
+  
+});
 
-exports.createDate = async (req, res) => {
-  try {
+exports.createDate = catchAsync(async (req, res) => {
     //1. OBTENER LA INFORMACION DE LA REQ.BODY
     const { date, userId } = req.body;
     //2. CREAR EL USUARIO CON LA INFORMACION DE LA REQ.BODY
@@ -55,16 +42,10 @@ exports.createDate = async (req, res) => {
       message: 'User created successfully',
       repairs,
     });
-  } catch (error) {
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
 
-exports.updateStatusRepairs = async (req, res) => {
-  try {
+});
+
+exports.updateStatusRepairs = catchAsync(async (req, res) => {
     // 2. OBTENER LA INFORMACION A ACTUALIZAR DE LA REQ.BODY
     const { repairs } = req;
 
@@ -76,16 +57,10 @@ exports.updateStatusRepairs = async (req, res) => {
       status: 'success',
       message: 'User updated successfully',
     });
-  } catch (error) {
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
 
-exports.cancelRepair = async (req, res) => {
-  try {
+});
+
+exports.cancelRepair = catchAsync(async (req, res) => {
     const { repairs } = req;
     // 4. REALIZAR LA ACTUALIZACIÓN DEL STATUS DEL USUARIO ENCONTRADO ANTERIORMENTE
     await repairs.update({ status: "cancelled"});
@@ -94,10 +69,5 @@ exports.cancelRepair = async (req, res) => {
       status: 'success',
       message: 'User deleted successfully',
     });
-  } catch (error) {
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
+  
+});

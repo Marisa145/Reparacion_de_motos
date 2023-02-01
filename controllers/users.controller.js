@@ -1,7 +1,7 @@
 const User = require('../models/user.model');
+const catchAsync = require('../utils/catchAsync');
 
-exports.findAllUsers = async (req, res) => {
-  try {
+exports.findAllUsers = catchAsync(async (req, res) => {
     // 1. BUSCAR TODOS LOS USUARIOS QUE ESTAN CON STATUS TRUE
     const users = await User.findAll({
       where: {
@@ -14,17 +14,10 @@ exports.findAllUsers = async (req, res) => {
       message: 'Users was found successfully',
       users,
     });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
+  
+});
 
-exports.findOneUser = async (req, res) => {
-  try {
+exports.findOneUser = catchAsync(async (req, res) => {
     const { user } = req;
 
     // 4. ENVIAR UNA RESPUESTA AL USUARIO
@@ -33,17 +26,10 @@ exports.findOneUser = async (req, res) => {
       message: 'User was found successfully',
       user,
     });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
+  
+});
 
-exports.createUser = async (req, res) => {
-  try {
+exports.createUser = catchAsync(async(req, res) => {
     //1. OBTENER LA INFORMACION DE LA REQ.BODY
     const { name, email, password, role } = req.body;
     //2. CREAR EL USUARIO CON LA INFORMACION DE LA REQ.BODY
@@ -59,21 +45,14 @@ exports.createUser = async (req, res) => {
       message: 'User created successfully',
       user,
     });
-  } catch (error) {
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
+});
 
-exports.updateUser = async (req, res) => {
-  try {
-    // 2. OBTENER LA INFORMACION A ACTUALIZAR DE LA REQ.BODY
+exports.updateUser = catchAsync(async(req, res) => {
+    // 1. OBTENER LA INFORMACION A ACTUALIZAR DE LA REQ.BODY
     const { username, email } = req.body;
     const { user } = req;
 
-    // 5. REALIZAR LA ACTUALIZACIÓN DEL USUARIO, CAMPOS USERNAME, EMAIL
+    // 2. REALIZAR LA ACTUALIZACIÓN DEL USUARIO, CAMPOS USERNAME, EMAIL
     await user.update({ username, email });
 
     // 6. ENVIAR UNA RESPUESTA AL CLIENTE
@@ -81,16 +60,11 @@ exports.updateUser = async (req, res) => {
       status: 'success',
       message: 'User updated successfully',
     });
-  } catch (error) {
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
+  
+});
 
-exports.deleteUser = async (req, res) => {
-  try {
+exports.deleteUser = catchAsync(async (req, res) => {
+  
     const { user } = req;
     // 4. REALIZAR LA ACTUALIZACIÓN DEL STATUS DEL USUARIO ENCONTRADO ANTERIORMENTE
     await user.update({ status: false });
@@ -99,10 +73,5 @@ exports.deleteUser = async (req, res) => {
       status: 'success',
       message: 'User deleted successfully',
     });
-  } catch (error) {
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-    });
-  }
-};
+  
+});
