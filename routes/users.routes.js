@@ -31,9 +31,9 @@ router.post(
 router.patch(
   '/:id',
   [
-    check('username', 'The username must be mandatory').not().isEmpty(),
-    check('email', 'The email must be mandatory').not().isEmpty(),
-    check('email', 'The email must be a correct format').isEmail(),
+    check('date', 'The date must be a have the next format : DD-MM-YYYY ').isDate({format: 'DD-MM-YYYY'}),
+    check('motorsNumber', 'The motorsNumber must be a number').isNumeric(),
+    check('description', 'The email must be a correct format').not().isEmpty(),
     validateFields,
     validIfExistUser,
   ],
