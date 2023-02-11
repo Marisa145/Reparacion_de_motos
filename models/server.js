@@ -49,8 +49,8 @@ class Server {
     db.authenticate()
       .then(() => console.log('Database authenticated'))
       .catch(error => console.log(error));
-     // relations
-     initmodel();
+    // relations
+    initmodel();
 
     db.sync()
       .then(() => console.log('Database synced'))
