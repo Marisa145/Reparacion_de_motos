@@ -27,31 +27,13 @@ exports.findOneUser = catchAsync(async (req, res) => {
   });
 });
 
-exports.createUser = catchAsync(async (req, res) => {
-  //1. OBTENER LA INFORMACION DE LA REQ.BODY
-  const { name, email, password, role } = req.body;
-  //2. CREAR EL USUARIO CON LA INFORMACION DE LA REQ.BODY
-  const user = await User.create({
-    name: name.toLowerCase(),
-    email: email.toLowerCase(),
-    password,
-    role: role.toLowerCase(),
-  });
-  //3. ENVIAR UNA RESPUESTA AL USUARIO
-  res.status(201).json({
-    status: 'success',
-    message: 'User created successfully',
-    user,
-  });
-});
-
 exports.updateUser = catchAsync(async (req, res) => {
   // 1. OBTENER LA INFORMACION A ACTUALIZAR DE LA REQ.BODY
-  const { username, email } = req.body;
+  const { name, email } = req.body;
   const { user } = req;
 
   // 2. REALIZAR LA ACTUALIZACIÓN DEL USUARIO, CAMPOS USERNAME, EMAIL
-  await user.update({ username, email });
+  await user.update({ name, email });
 
   // 6. ENVIAR UNA RESPUESTA AL CLIENTE
   res.status(200).json({

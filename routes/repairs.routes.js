@@ -7,6 +7,7 @@ const {
   updateStatusRepairs,
   cancelRepair,
 } = require('../controllers/repairs.controller');
+const { protectAccountOwner } = require('../middlewares/auth.middleware');
 const { validIfExistRepair } = require('../middlewares/repairs.middleware');
 
 const router = Router();
@@ -34,7 +35,7 @@ router.patch('/:id', [
   updateStatusRepairs,
 ]);
 
-router.delete('/:id', validIfExistRepair, cancelRepair);
+router.delete('/:id', validIfExistRepair, protectAccountOwner, cancelRepair);
 
 module.exports = {
   repairsRouter: router,

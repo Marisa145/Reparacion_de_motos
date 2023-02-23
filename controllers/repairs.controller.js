@@ -1,4 +1,5 @@
 const Repairs = require('../models/repairs.model');
+const User = require('../models/user.model');
 const catchAsync = require('../utils/catchAsync');
 
 exports.pendingListRepairs = catchAsync(async (req, res) => {
@@ -8,6 +9,11 @@ exports.pendingListRepairs = catchAsync(async (req, res) => {
       status: 'pending',
     },
   });
+  include = [
+    {
+      model: User,
+    },
+  ];
   // 2. ENVIAR UNA RESPUESTA AL USUARIO
   res.status(200).json({
     status: 'success',

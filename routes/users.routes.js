@@ -3,10 +3,13 @@ const { check } = require('express-validator');
 const {
   findAllUsers,
   findOneUser,
-  createUser,
   updateUser,
   deleteUser,
 } = require('../controllers/users.controller');
+const {
+  protect,
+  protectAccountOwner,
+} = require('../middlewares/auth.middleware');
 const { validIfExistUser } = require('../middlewares/user.middleware');
 const { validateFields } = require('../middlewares/validateField.middleware');
 
@@ -16,17 +19,7 @@ router.get('/', findAllUsers);
 
 router.get('/:id', validIfExistUser, findOneUser);
 
-router.post(
-  '/',
-  [
-    check('name', 'The username must be mandatory').not().isEmpty(),
-    check('email', 'The email must be mandatory').not().isEmpty(),
-    check('email', 'The email must be a correct format').isEmail(),
-    check('password', 'The password must be mandatory').not().isEmpty(),
-    validateFields,
-  ],
-  createUser
-);
+router.use(protect);
 
 router.patch(
   '/:id',
@@ -34,14 +27,14 @@ router.patch(
     check('name', 'The username must be mandatory').not().isEmpty(),
     check('email', 'The email must be mandatory').not().isEmpty(),
     check('email', 'The email must be a correct format').isEmail(),
-    check('password', 'The password must be mandatory').not().isEmpty(),
     validateFields,
     validIfExistUser,
+    protectAccountOwner,
   ],
   updateUser
 );
 
-router.delete('/:id', validIfExistUser, deleteUser);
+router.delete('/:id', validIfExistUser, protectAccountOwner, deleteUser);
 
 module.exports = {
   usersRouter: router,
