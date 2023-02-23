@@ -7,14 +7,15 @@ const {
   updateStatusRepairs,
   cancelRepair,
 } = require('../controllers/repairs.controller');
-const { protectAccountOwner } = require('../middlewares/auth.middleware');
+const {
+  protectAccountOwner,
+  restrictTo,
+  protect,
+} = require('../middlewares/auth.middleware');
 const { validIfExistRepair } = require('../middlewares/repairs.middleware');
+const { validateFields } = require('../middlewares/validateField.middleware');
 
 const router = Router();
-
-router.get('/', pendingListRepairs);
-
-router.get('/:id', validIfExistRepair, pendingOneRepair);
 
 router.post('/', [
   check('date', 'The date must be a have the next format : DD-MM-YYYY ').isDate(
@@ -22,8 +23,20 @@ router.post('/', [
   ),
   check('motorsNumber', 'The motorsNumber must be a number').isNumeric(),
   check('description', 'The email must be a correct format').not().isEmpty(),
+  validateFields,
   createDate,
 ]);
+
+router.use(protect);
+
+router.get('/', restrictTo('employee'), pendingListRepairs);
+
+router.get(
+  '/:id',
+  validIfExistRepair,
+  restrictTo('employee'),
+  pendingOneRepair
+);
 
 router.patch('/:id', [
   check('date', 'The date must be a have the next format : DD-MM-YYYY ').isDate(
@@ -32,10 +45,17 @@ router.patch('/:id', [
   check('motorsNumber', 'The motorsNumber must be a number').isNumeric(),
   check('description', 'The email must be a correct format').not().isEmpty(),
   validIfExistRepair,
+  restrictTo('employee'),
   updateStatusRepairs,
 ]);
 
-router.delete('/:id', validIfExistRepair, protectAccountOwner, cancelRepair);
+router.delete(
+  '/:id',
+  validIfExistRepair,
+  protectAccountOwner,
+  restrictTo('employee'),
+  cancelRepair
+);
 
 module.exports = {
   repairsRouter: router,

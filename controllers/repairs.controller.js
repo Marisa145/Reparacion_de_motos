@@ -6,7 +6,7 @@ exports.pendingListRepairs = catchAsync(async (req, res) => {
   // 1. BUSCAR TODOS LOS USUARIOS QUE ESTAN CON STATUS PENDING
   const repairs = await Repairs.findAll({
     where: {
-      status: 'pending',
+      status: ['pending', 'completed'],
     },
   });
   include = [
@@ -34,11 +34,13 @@ exports.pendingOneRepair = catchAsync(async (req, res) => {
 
 exports.createDate = catchAsync(async (req, res) => {
   //1. OBTENER LA INFORMACION DE LA REQ.BODY
-  const { date, userId } = req.body;
+  const { date, userId, description, motorsNumber } = req.body;
   //2. CREAR EL USUARIO CON LA INFORMACION DE LA REQ.BODY
   const repairs = await Repairs.create({
     date,
     userId,
+    description,
+    motorsNumber,
   });
   //3. ENVIAR UNA RESPUESTA AL USUARIO
   res.status(201).json({
