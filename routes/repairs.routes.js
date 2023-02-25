@@ -18,9 +18,7 @@ const { validateFields } = require('../middlewares/validateField.middleware');
 const router = Router();
 
 router.post('/', [
-  check('date', 'The date must be a have the next format : DD-MM-YYYY ').isDate(
-    { format: 'DD-MM-YYYY' }
-  ),
+  check('date', 'Date is Require').not().isEmpty(),
   check('motorsNumber', 'The motorsNumber must be a number').isNumeric(),
   check('description', 'The email must be a correct format').not().isEmpty(),
   validateFields,

@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const globalErrorHandler = require('../controllers/error.controller');
 const AppError = require('../utils/appError');
 const initmodel = require('./init.model');
+const { authRouter } = require('../routes/auth.routes');
 
 class Server {
   constructor() {
@@ -14,6 +15,7 @@ class Server {
     this.port = process.env.PORT || 3000;
 
     this.paths = {
+      auth: '/api/v1/auth',
       users: '/api/v1/users',
       repairs: '/api/v1/repairs',
     };
@@ -34,6 +36,7 @@ class Server {
   }
 
   routes() {
+    this.app.use(this.paths.auth, authRouter);
     this.app.use(this.paths.users, usersRouter);
     this.app.use(this.paths.repairs, repairsRouter);
 
